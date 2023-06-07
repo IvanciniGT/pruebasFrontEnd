@@ -128,6 +128,12 @@ Estoy montando una aplicación:
     Pruebas unitarias                     Pruebas unitarias
 
 
+        //import ServicioPersonas from './servicios/servicio.personas.js'
+        Inversión de dependencias. No me importa quien me dé una funcionalidad... ma importa la funcionalidad
+            ^^^^
+        Inyección de dependencias
+
+
                     | Servicio js | < Mock >> Microservicio
     Las herramientas de mock, como Sinon.js
 
@@ -234,8 +240,7 @@ Pruebas de calidad de código:
 Cultura, filosofía, movimiento en pro de LA AUTOMATIZACION... de qué? de todo lo que hay entre desarrollo y operaciones.
 
 Desarrollo y Operaciones
-Conjunto de herramientas que ayudan a Entrega Continua
-Herramientas que automatizan Entrega Continua
+Conjunto de herramientas que ayudan a Integración, Entrega, Despliegue Continuo
 
 ---
 
@@ -304,3 +309,120 @@ La misión de un desarrollador es escribir la MINIMA CANTIDAD DE CODIGO POSIBLE 
 
 Eso es usar una metodología TDD.
 Con guerkin habitualmente (cuando lo que definen son los requisitos de alto nivel) lo que aplicamos es una metodología BDD.
+
+---
+
+## Cómo escribir pruebas
+
+- Descripción
+- Precondiciones
+- Tareas
+  - Datos de prueba
+- Validaciones/Comprobaciones
+-> Ha ido guay
+-> Ruina
+
+### Lenguajes con los que escribir pruebas:
+
+- gherkin
+- javascript: mocha
+
+---
+Fichero Javscript
+Este fichero tiene una serie de funciones definidas
+
+ServicioUsuarios.js
+    .getUsuario(id)                                                             GET /api/v2/usuarios/{id}
+    .updateUsuario(id, datos)           ----> Backend (CRUD) - API REST
+    .deleteUsuario(id)                                                          DELETE /api/v2/usuarios/{id}
+    .createUsuario(datos)
+    .existsUsuario(id)                                                          HEAD /api/v2/usuarios/{id}
+    .getUsuarios()                                                              GET /api/v2/usuarios
+                                                                                 200   [
+                                                                                            {...},
+                                                                                            {...},
+                                                                                            {...},
+                                                                                            {
+                                                                                                nombre: "",
+                                                                                                apellidos: "",
+                                                                                                email: "",
+                                                                                                edad: 33,
+                                                                                            },
+                                                                                        ]
+
+    function transformar(datos){
+        return datos // .map( usuario => ({...usuario}) )
+    }
+    function getUsuarios(callback) {
+        fetch("https://miservidor:8080/api/v2/usuarios")
+            .then( (datos) =>  callback(transformar(datos)))
+    }
+    function getUsuarios() {
+        return fetch("https://miservidor:8080/api/v2/usuarios")
+    }
+
+[
+    {...},
+    {...},
+    {...},
+    {
+        nombre: "",
+        apellidos: "",
+        email: "",
+        edad: 33,
+    },
+]
+
+----
+
+ServicioUsuarios.js
+    .getUsuario(id)                                                             GET /api/v2/usuarios/{id}
+    .updateUsuario(id, datos)           ----> Backend (CRUD) - API REST
+    .deleteUsuario(id)                                                          DELETE /api/v2/usuarios/{id}
+    .createUsuario(datos)
+    .existsUsuario(id)                                                          HEAD /api/v2/usuarios/{id}
+    .getUsuarios()                                                              GET /api/v2/usuarios
+
+
+QUIERO PROBAR ServicioUsuarios.getUsuario(id)... qué hago?
+A qué nivel?
+- Unitaria. Si ... pero... Necesito aislar la función, porque la función depende de un backend... MOCK !!!
+- Integración. Bueno... Que yo recuerde la prueba de integración prueba la comunicación entre componentes
+                Si estamos hablando solo de un componente... puedo hacer prueba de integración?? Con quién?
+                ServicioUsuarios.getUsuario(id) **->** GET /api/v2/usuarios/{id}
+- Sistema.  Sistema? Que tengo una función... Puedo mirar el comportamiento pero de la función...
+
+----
+Prueba unitaria del ServicioUsuarios.getUsuario(id)
+
+- Descripción
+    Probar que soy capaz de recuperar los datos de un usuario desde su id a través del Servicio de Usuarios
+- Datos de prueba
+    - Usuario con id 1 y datos:
+      - nombre: Ivan
+      - apellidos: Osuna
+      - edad: 44
+      - email: ivan@gmail.com
+- Precondiciones
+    - Tengo un id de un usuario
+    - Tengo un servicio de mentirijilla al que putear
+- Tareas
+    - Llamar a la función getUsuario del ServicioUsuarios, pasándole el id 1
+    - Capturar la respuesta
+- Validaciones/Comprobaciones
+    - La respuesta debe ser un objeto JS
+    - que debe contener:
+      - un campo nombre, con valor Ivan
+      - un campo apellidos, con valor Osuna
+      - un campo edad, con valor 44
+      - un campo email, con valor ivan@gmail.com
+
+Prueba? Si... aunque realmente es otra cosa... Lo que he definido es EL COMPORTAMIENTO de la función.
+Eso sí, he definido ese comportamiento mediante un EJEMPLO de uso.
+
+O mejor dicho... parte del comportamiento... hay otros comportamientos que no haya definido
+
+
+-> Ha ido guay
+-> Ruina
+
