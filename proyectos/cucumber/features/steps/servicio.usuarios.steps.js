@@ -1,33 +1,59 @@
 const {When, Then, Given} =require("cucumber")
 const chai =require("chai")
+const {getUsuario} = require("../../ServicioUsuarios.js")
 
 var datosRespuesta = undefined
 
 Given('un usuario con el id {int}', function (int) {
 });
 
-Given('con nombre: {string}', function (string) {
+Given('con {string}: {string}', function (propiedad, valor) {
 });
-
-Given('con apellidos: {string}', function (string) {
-});
-
-Given('con edad: {int}', function (int) {
-});
-
-Given('con email: {string}', function (string) {
+Given('con {string}: {int}', function (propiedad, valor) {
 });
 
 Given('el usuario es accesible usando un servicio backend de mentirijillla', function () {
 });
 
-When('se invoca la función {string} del Servicio de Usuarios, con el valor {int} y una función de callback que captura su respuesta', function (string, int) {
+////// DE AQUI PARA ABAJO
+
+When('se invoca la función {string}, con el valor {int} y una función de ' +
+        'callback que captura su respuesta', function (funcion, argumento) {
+            const callback = (dato1, dato2)=>{
+                this.respuesta = [dato1,dato2]
+            }
+            switch(funcion){
+                case "getUsuario":
+                    getUsuario(argumento, callback)
+                    break
+                case "createtUsuario":
+                    //getUsuario(argumento, callback)
+                    break
+            }
+        });
+
+Then('la respuesta debe contener {int} argumentos', function (numeroDatosRespuesta) {
+    chai.expect(this.respuesta).to.have.lengthOf(numeroDatosRespuesta)
 });
 
-Then('la respuesta debe ser una lista', function () {
+Then('el argumento {int} debe tener un {string}', function (argumento, tipoDeDatos) {
+    var tipo = "number"
+    switch(tipoDeDatos){
+        case "numero":
+            tipo = "number"
+            break
+        case "objeto json":
+            tipo = "object"
+            break
+    }
+    chai.expect(this.respuesta[argumento-1]).to.be.a(tipo)
 });
-
-Then('en la primera posición se devuelve el valor {int}', function (int) {
+Then('el argumento {int} debe tener el valor {int}', function (argumento, valor) {
+    chai.expect(this.respuesta[argumento-1]).to.equals(valor)
+});
+Then('el argumento {int} tiene por {string}: {string}', function (argumento, propiedad, valor) {
+    chai.expect(this.respuesta[argumento-1]).to.have.property(propiedad)
+    chai.expect(this.respuesta[argumento-1][propiedad]).to.equals(valor)
 });
 
 Then('en la segunda posición tengo un objeto json,', function () {

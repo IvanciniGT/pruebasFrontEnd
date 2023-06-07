@@ -13,4 +13,14 @@ function getUsuario(id, callback){
     callback(200, usuarios[id])
 }
 
-export default getUsuario
+function deleteUsuario(id, callback){
+    
+}
+function createUsuario(datos, callback){
+    
+}
+
+
+function updateUsuario(id, datos, callback){
+    
+}
