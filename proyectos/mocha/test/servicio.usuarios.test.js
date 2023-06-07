@@ -1,6 +1,6 @@
 console.log("Pruebas con mocha")
 import getUsuario from "../ServicioUsuarios.js"
-import chai from chai
+import chai from "chai"
 
 describe("Función getUsuario del Servicio de Usuarios", ()=> {
 
