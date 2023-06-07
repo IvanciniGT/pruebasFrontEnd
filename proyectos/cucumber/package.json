@@ -4,12 +4,12 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "test": "npx cucumber"
+    "test": "npx cucumber-js"
   },
   "author": "",
   "license": "ISC",
   "dependencies": {
     "chai": "^4.3.7",
-    "cucumber": "^6.0.7"
+    "@cucumber/cucumber": "^8.0"
   }
 }

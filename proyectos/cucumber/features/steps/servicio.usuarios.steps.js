@@ -1,6 +1,6 @@
-const {When, Then, Given} =require("cucumber")
+const {When, Then, Given} =require("@cucumber/cucumber")
 const chai =require("chai")
-const {getUsuario} = require("../../ServicioUsuarios.js")
+const ServicioUsuarios = require("../../ServicioUsuarios.js")
 
 var datosRespuesta = undefined
 
@@ -24,7 +24,7 @@ When('se invoca la función {string}, con el valor {int} y una función de ' +
             }
             switch(funcion){
                 case "getUsuario":
-                    getUsuario(argumento, callback)
+                    ServicioUsuarios.getUsuario(argumento, callback)
                     break
                 case "createtUsuario":
                     //getUsuario(argumento, callback)
@@ -55,19 +55,6 @@ Then('el argumento {int} tiene por {string}: {string}', function (argumento, pro
     chai.expect(this.respuesta[argumento-1]).to.have.property(propiedad)
     chai.expect(this.respuesta[argumento-1][propiedad]).to.equals(valor)
 });
-
-Then('en la segunda posición tengo un objeto json,', function () {
-});
-
-
-
-Then('el objeto json tiene por {string}: {string}', function (propiedad, propiedad) {
-    chai.expect(datosRespuesta).to.have.property(propiedad)
-    chai.expect(datosRespuesta[propiedad]).to.equal(propiedad)
-});
-
-
-
 
 
 Given('un servicio backend de mentirijillla', function () {
