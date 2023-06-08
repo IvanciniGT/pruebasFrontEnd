@@ -1,4 +1,5 @@
 class UserService {
+    
     constructor(baseUrl) {
       this.baseUrl = baseUrl;
     }
@@ -10,14 +11,14 @@ class UserService {
         .catch((error) => callback(error, null));
     }
   
-    getUser(userId, callback) {
+    getUser(userId, callback) { // Vamos a probar
       fetch(`${this.baseUrl}/users/${userId}`)
         .then((response) => response.json())
         .then((data) => callback(null, data))
         .catch((error) => callback(error, null));
     }
   
-    createUser(user, callback) {
+    createUser(user, callback) { // Vamos a probarlo
       fetch(`${this.baseUrl}/users`, {
         method: 'POST',
         headers: {
@@ -43,7 +44,7 @@ class UserService {
         .catch((error) => callback(error, null));
     }
   
-    deleteUser(userId, callback) {
+    deleteUser(userId, callback) { // delete user
       fetch(`${this.baseUrl}/users/${userId}`, {
         method: 'DELETE',
       })
