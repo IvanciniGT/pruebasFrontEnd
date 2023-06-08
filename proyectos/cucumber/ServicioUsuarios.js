@@ -7,7 +7,17 @@ class UserService {
     getUsers(callback) {
       fetch(`${this.baseUrl}/users`)
         .then((response) => response.json())
-        .then((data) => callback(null, data))
+        .then((data) => callback(null, {...data}))
+        /*      ^
+               data del backend:        ^^ Data del frontend
+                {                                   {
+                    "id": 1,                            "id": 1,
+                    "name": "Leanne Graham",            "nombre": "Leanne Graham",
+                    "username": "Bret",                 "apellidos": "Bret",
+                    "email": ""                         "email": "",
+                    "age": 18,                          "edad": 18,
+                }                                     }                                      
+        */
         .catch((error) => callback(error, null));
     }
   

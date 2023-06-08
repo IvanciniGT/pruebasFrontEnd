@@ -5,18 +5,6 @@ const ServicioUsuarios = require("../../ServicioUsuarios.js")
 
 // Fase 1: Montar un mock del backend
 
-Given('un usuario con el id {int}', function (int) {
-});
-
-Given('con {string}: {string}', function (string, string2) {
-});
-
-Given('con {string}: {int}', function (string, int) {
-});
-
-Given('el usuario es accesible usando un servicio backend de mentirijillla', function () {
-});
-
 Given('que no hay servicio de backend operativo', function () {
     this.servicioUsuarios = new ServicioUsuarios("http://backend.inexistente:3000")
 });
@@ -25,9 +13,13 @@ Given('un servicio backend de mentirijillla', function () {
     // Crear un servidor de mentirijilla que devuelva respuestas trucadas
 });
 
-Given('el servicio no tiene el usuario con id {int}', function (int) {
+Given('que el objeto json esté cargado en el servicio backend de mentirijillla', function(){
+
 });
 
+Given('el servicio no tiene el usuario con id {int}', function (int) {
+    
+});
 
 //// Fase 2: Montar las pruebas atacando al backend de mentirijilla desde nuestro servicio de usuarios
 
@@ -46,7 +38,6 @@ When('se invoca la función {string}, con el valor {int} y una función de callb
     funcion(identificador, (error, user) => {
         // Capturamos los datos y los guardamos para su posterior uso
         this.respuesta = [error,user];
-        console.log("RESPUESTA",this.respuesta)
     });
 });
 
@@ -79,4 +70,60 @@ Then('el argumento {int} tiene por {string}: {int}', function (numeroArgumento, 
 
 Then('el argumento {int} no debe llegar vacio', function (numeroArgumento) {
     chai.expect(this.respuesta[numeroArgumento-1]).to.not.be.null;
+});
+
+
+
+Given('un objeto json,', function () {
+    this.objetoJson={}
+});
+
+When('creo un objeto json,', function () {
+    this.objetoJson={}
+});
+
+Given('con {string}: {string}', function (campo, valor) {
+    this.objetoJson[campo]=valor;
+});
+
+Given('con {string}: {int}', function (campo, valor) {
+    this.objetoJson[campo]=valor;
+});
+When('se invoca la función {string}, con ese objeto json y una función de callback que captura su respuesta', function (nombreFuntion) {
+    var funcion;
+    switch(nombreFuntion){
+        case "createUser":
+            funcion = this.servicioUsuarios.createUser.bind(this);
+            break;
+        default:
+            throw new Error("Funcion no implementada");
+    }
+    funcion(this.objetoJson, (error, user) => {
+        // Capturamos los datos y los guardamos para su posterior uso
+        this.respuesta = [error,user];
+    });
+
+});
+
+Then('el argumento {int} tiene por {string} de tipo {string}', function (numeroArgumento, campo, nombreTipoDeDato) {
+    var tipoDeDato;
+    switch(nombreTipoDeDato){
+        case "numerico":
+            tipoDeDato = "number";
+    }
+    chai.expect(this.respuesta[numeroArgumento-1][campo]).to.be.a(tipoDeDato);
+});
+
+When('se invoca la función {string}, con el {string} del argumento {int} de la respuesta anterior y una función de callback que captura su respuesta', function (nombreFuntion, campo, numeroArgumento) {
+    var funcion;
+    switch(nombreFuntion){
+        case "getUser":
+            funcion = this.servicioUsuarios.getUser.bind(this);
+            break;
+        default:
+            throw new Error("Funcion no implementada");
+    }
+    funcion(this.respuesta[numeroArgumento-1][campo], (error, user) => {
+        this.respuesta = [error,user];
+    })
 });
