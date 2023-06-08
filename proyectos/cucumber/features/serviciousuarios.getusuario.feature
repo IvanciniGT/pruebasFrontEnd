@@ -37,3 +37,31 @@ Feature: Servicio de Usuarios
          Then la respuesta debe ser una lista
           And en la primera posición se devuelve el valor 5??
           And en la segunda posición no tengo nada
+
+
+     # Scenario Outline:
+    Scenario Template: Probar que soy capaz de borrar un usuario que existe desde su id
+        Given un usuario con el id <id>
+          And con "nombre": "<nombre>"
+          And con "apellidos": "<apellidos>"
+          And con "edad": <edad>
+          And con "email": "<email>"
+          And el usuario es accesible usando un servicio backend de mentirijillla
+         When se invoca la función "deleteUsuario", con el valor <id> y una función de callback que captura su respuesta
+         Then la respuesta debe contener 2 argumentos
+          And el argumento 1 debe tener un "numero",
+          And el argumento 1 debe tener el valor 200
+          And el argumento 2 debe tener un "objeto json",
+          And el argumento 2 tiene por "nombre": "<nombre>"
+          And el argumento 2 tiene por "apellidos": "<apellidos>"
+          And el argumento 2 tiene por "edad": <edad>
+          And el argumento 2 tiene por "email": "<email>"
+
+         When se invoca la función "getUsuario" del Servicio de Usuarios, con el valor <id> y una función de callback que captura su respuesta
+         Then la respuesta debe ser una lista
+          And en la primera posición se devuelve el valor 404
+          And en la segunda posición no tengo nada
+
+          Examples:
+               | id | nombre | apellidos | edad | email          |
+               |  1 | Ivan   | Osuna     | 44   | ivan@gmail.com |

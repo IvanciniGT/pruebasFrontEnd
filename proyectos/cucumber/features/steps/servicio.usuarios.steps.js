@@ -26,10 +26,13 @@ When('se invoca la función {string}, con el valor {int} y una función de ' +
                 case "getUsuario":
                     ServicioUsuarios.getUsuario(argumento, callback)
                     break
-                case "createtUsuario":
+                case "createUsuario":
                     //getUsuario(argumento, callback)
                     break
-            }
+                case "deleteUsuario":
+                    //deleteUsuario(argumento, callback)
+                    break
+                }
         });
 
 Then('la respuesta debe contener {int} argumentos', function (numeroDatosRespuesta) {
@@ -48,9 +51,11 @@ Then('el argumento {int} debe tener un {string}', function (argumento, tipoDeDat
     }
     chai.expect(this.respuesta[argumento-1]).to.be.a(tipo)
 });
+
 Then('el argumento {int} debe tener el valor {int}', function (argumento, valor) {
     chai.expect(this.respuesta[argumento-1]).to.equals(valor)
 });
+
 Then('el argumento {int} tiene por {string}: {string}', function (argumento, propiedad, valor) {
     chai.expect(this.respuesta[argumento-1]).to.have.property(propiedad)
     chai.expect(this.respuesta[argumento-1][propiedad]).to.equals(valor)
