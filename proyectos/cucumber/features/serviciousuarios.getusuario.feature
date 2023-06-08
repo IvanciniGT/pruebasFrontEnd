@@ -49,14 +49,15 @@ Feature: Servicio de Usuarios
           And el argumento 2 debe llegar vacio
 
     Scenario Template: Probar que soy capaz de borrar un usuario que existe desde su id
-        Given un usuario con el id <id>
+        Given un servicio backend de mentirijillla
+          And un objeto json,
+          And con "id": <id>
           And con "nombre": "<nombre>"
           And con "apellidos": "<apellidos>"
           And con "edad": <edad>
           And con "email": "<email>"
-          #And el usuario es accesible usando un servicio backend real
-          And el usuario es accesible usando un servicio backend de mentirijillla
-         When se invoca la función "deletetUser", con el valor <id> y una función de callback que captura su respuesta
+          And que el objeto json esté cargado en el servicio backend de mentirijillla
+         When se invoca la función "deleteUser", con el valor <id> y una función de callback que captura su respuesta
          Then la respuesta debe contener 2 argumentos
           And el argumento 1 debe llegar vacio
           And el argumento 2 debe tener un "objeto json"

@@ -1,5 +1,7 @@
 const {When, Then, Given} =require("@cucumber/cucumber")
 const chai =require("chai")
+const sinon =require("sinon")
+const fetch =require("node-fetch")
 const ServicioUsuarios = require("../../ServicioUsuarios.js")
 
 
@@ -11,14 +13,36 @@ Given('que no hay servicio de backend operativo', function () {
 
 Given('un servicio backend de mentirijillla', function () {
     // Crear un servidor de mentirijilla que devuelva respuestas trucadas
+    this.servicioUsuarios = new ServicioUsuarios("http://backend.mentirijilla:3000")
+    // Mock... seria montar un servidor de mentira que devuelva respuestas preconfiguradas
+    // Stub... sería montar una nueva implementación de la función fetch que devuelva respuestas trucadas
+    this.entorno=this.entorno ? this.entorno : sinon.createSandbox();
+    this.entorno.restore()
+    this.entorno.stub(fetch, "Promise").resolves(
+            {
+            status: 404,
+            json: ()=>Promise.resolve( undefined )
+        }
+    )
 });
 
 Given('que el objeto json esté cargado en el servicio backend de mentirijillla', function(){
+    this.entorno.restore()
+    this.entorno.stub(fetch, "Promise").returns(Promise.resolve(
+        {
+            status: 200,
+            json: ()=>{
+                return Promise.resolve(
+                    this.objetoJson
+                )
+            }
+        }
+    ))
 
 });
 
 Given('el servicio no tiene el usuario con id {int}', function (int) {
-    
+
 });
 
 //// Fase 2: Montar las pruebas atacando al backend de mentirijilla desde nuestro servicio de usuarios
