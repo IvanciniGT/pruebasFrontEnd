@@ -1,5 +1,5 @@
 class UserService {
-    
+
     constructor(baseUrl) {
       this.baseUrl = baseUrl;
     }
@@ -53,4 +53,5 @@ class UserService {
         .catch((error) => callback(error, null));
     }
   }
-  
+// Exportamos la clase
+module.exports = UserService;
