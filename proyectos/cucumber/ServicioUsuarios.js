@@ -1,26 +1,55 @@
-
-const usuarios = {
-    1: {
-        "nombre": "Ivan",
-        "apellidos": "Osuna", 
-        "edad": 44,
-        "email": "ivan@gmail.com"
+class UserService {
+    constructor(baseUrl) {
+      this.baseUrl = baseUrl;
     }
-}
-
-
-function getUsuario(id, callback){
-    callback(200, usuarios[id])
-}
-
-function deleteUsuario(id, callback){
-    
-}
-function createUsuario(datos, callback){
-    
-}
-
-
-function updateUsuario(id, datos, callback){
-    
-}
+  
+    getUsers(callback) {
+      fetch(`${this.baseUrl}/users`)
+        .then((response) => response.json())
+        .then((data) => callback(null, data))
+        .catch((error) => callback(error, null));
+    }
+  
+    getUser(userId, callback) {
+      fetch(`${this.baseUrl}/users/${userId}`)
+        .then((response) => response.json())
+        .then((data) => callback(null, data))
+        .catch((error) => callback(error, null));
+    }
+  
+    createUser(user, callback) {
+      fetch(`${this.baseUrl}/users`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(user),
+      })
+        .then((response) => response.json())
+        .then((data) => callback(null, data))
+        .catch((error) => callback(error, null));
+    }
+  
+    updateUser(userId, user, callback) {
+      fetch(`${this.baseUrl}/users/${userId}`, {
+        method: 'PUT',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(user),
+      })
+        .then((response) => response.json())
+        .then((data) => callback(null, data))
+        .catch((error) => callback(error, null));
+    }
+  
+    deleteUser(userId, callback) {
+      fetch(`${this.baseUrl}/users/${userId}`, {
+        method: 'DELETE',
+      })
+        .then((response) => response.json())
+        .then((data) => callback(null, data))
+        .catch((error) => callback(error, null));
+    }
+  }
+  
