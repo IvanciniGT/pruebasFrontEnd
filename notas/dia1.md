@@ -426,3 +426,13 @@ O mejor dicho... parte del comportamiento... hay otros comportamientos que no ha
 -> Ha ido guay
 -> Ruina
 
+---
+
+http://miservidormentirijilla:3000/api/v1/users
+[
+    {.. usuario 1},
+    {.. usuario 2},
+]
+
+http://miservidormentirijilla:3000/api/v1/users/1
+{.. usuario 1}
