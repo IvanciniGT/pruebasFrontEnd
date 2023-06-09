@@ -1,44 +1,31 @@
-const {When, Then, Given} =require("@cucumber/cucumber")
+const {When, Then, Given, After, Before} =require("@cucumber/cucumber")
 const chai =require("chai")
 const sinon =require("sinon")
-const fetch =require("node-fetch")
 const ServicioUsuarios = require("../../ServicioUsuarios.js")
+const ServidorWebDeMentirijilla = require("./servicio.backend.stub.js")
 
-
+// Se ejecuta despues de cada escenario
+After(function(){
+    if(this.fakeServerStub){
+        this.fakeServerStub.resetear()
+        console.log("RESETAEADO")
+    }
+})
 // Fase 1: Montar un mock del backend
-
 Given('que no hay servicio de backend operativo', function () {
     this.servicioUsuarios = new ServicioUsuarios("http://backend.inexistente:3000")
 });
 
 Given('un servicio backend de mentirijillla', function () {
     // Crear un servidor de mentirijilla que devuelva respuestas trucadas
-    this.servicioUsuarios = new ServicioUsuarios("http://backend.mentirijilla:3000")
+    this.servicioUsuarios = new ServicioUsuarios("")
     // Mock... seria montar un servidor de mentira que devuelva respuestas preconfiguradas
     // Stub... sería montar una nueva implementación de la función fetch que devuelva respuestas trucadas
-    this.entorno=this.entorno ? this.entorno : sinon.createSandbox();
-    this.entorno.restore()
-    this.entorno.stub(fetch, "Promise").resolves(
-            {
-            status: 404,
-            json: ()=>Promise.resolve( undefined )
-        }
-    )
+    this.fakeServerStub = new ServidorWebDeMentirijilla()
 });
 
 Given('que el objeto json esté cargado en el servicio backend de mentirijillla', function(){
-    this.entorno.restore()
-    this.entorno.stub(fetch, "Promise").returns(Promise.resolve(
-        {
-            status: 200,
-            json: ()=>{
-                return Promise.resolve(
-                    this.objetoJson
-                )
-            }
-        }
-    ))
-
+    this.fakeServerStub.cargarUsuario(this.objetoJson)
 });
 
 Given('el servicio no tiene el usuario con id {int}', function (int) {
@@ -51,10 +38,11 @@ When('se invoca la función {string}, con el valor {int} y una función de callb
     var funcion;
     switch(nombreFuntion){
         case "getUser":
-            funcion = this.servicioUsuarios.getUser.bind(this);
+            funcion = this.servicioUsuarios.getUser;
             break;
         case "deleteUser":
-            funcion = this.servicioUsuarios.deleteUser.bind(this);
+            // Llamar al servidor de mentira (si lo hay) y pedirle que borre al usuario
+            funcion = this.servicioUsuarios.deleteUser;
             break;
         default:
             throw new Error("Funcion no implementada");
@@ -62,6 +50,7 @@ When('se invoca la función {string}, con el valor {int} y una función de callb
     funcion(identificador, (error, user) => {
         // Capturamos los datos y los guardamos para su posterior uso
         this.respuesta = [error,user];
+        console.log("Respuesta del servicio de Frontal", this.respuesta)
     });
 });
 
@@ -117,7 +106,8 @@ When('se invoca la función {string}, con ese objeto json y una función de call
     var funcion;
     switch(nombreFuntion){
         case "createUser":
-            funcion = this.servicioUsuarios.createUser.bind(this);
+            // Llamar al servidor de mentira (si lo hay) y pedirle que cree al usuario
+            funcion = this.servicioUsuarios.createUser;
             break;
         default:
             throw new Error("Funcion no implementada");

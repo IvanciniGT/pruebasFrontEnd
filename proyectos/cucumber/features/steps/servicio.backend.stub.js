@@ -1,67 +1,42 @@
-
-
-this.entorno.restore()
-this.entorno.stub(fetch, "Promise").returns(Promise.resolve(
-    {
-        status: 200,
-        json: ()=>{
-            return Promise.resolve(
-                this.objetoJson
-            )
-        }
-    }
-))
-
-/usuarios/1
-/usuarios/2
-
-
-//ServidorDeMentirijilla
-
-//Given un servicio backend de mentirijillla
-this.entorno.stub(fetch, "Promise").withArgs("/usuarios").returns(Promise.resolve( []  ))
-// Ese endpoint, en este momento, que listado de objetos concetos debería devolver? 
-//And que el objeto json esté cargado en el servicio backend de mentirijillla
-{
-    "id": 1
-    "nombre": "Ivan",
-    "apellidos": "osuna",
-    "edad": 44
-}
-this.entorno.stub(fetch, "Promise").withArgs("/usuarios/1").returns(Promise.resolve(
-    {
-        status: 200,
-        json: ()=>{
-            return Promise.resolve(
-                this.objetoJson
-            )
-        }
-    }
-))
-
-
-
-//And el servicio no tiene el usuario con id 2
-
+const sinon = require ('sinon')
 
 class ServidorWebDeMentirijilla{
 
     constructor(){
+        this.entorno = sinon.createSandbox();
+        this.mistub = this.entorno.stub(global,"fetch")
         this.usuarios=[]
-        this.entorno.stub(global, "fetch").withArgs("/usuarios").returns(Promise.resolve( this.usuarios ))
+        this.mistub.resolves( this.#generarRespuesta(404) )
+        this.mistub.withArgs("/users").resolves( this.#generarRespuesta(200,this.usuarios) )
     }
 
-    cargaUsuario(usuario){
+    cargarUsuario(usuario){
         this.usuarios.push(usuario)
-        this.entorno.stub(fetch, "Promise").withArgs("/usuarios/"+usuario.id).returns(Promise.resolve(
-            {
-                status: 200,
-                json: ()=>{
-                    return Promise.resolve(
-                        usuario
-                    )
-                }
-            }
-        ))
+        this.mistub.withArgs("/users/"+usuario.id).resolves(this.#generarRespuesta(200, usuario ))
      }
+
+     borrarUsuario(usuario) {
+        this.usuarios=this.usuarios.filter( usuarioGuardado => usuarioGuardado.id !==  usuario.id)
+        this.mistub.withArgs("/users/"+usuario.id).resolves( this.#generarRespuesta(404) )
+     }
+     modificarUsuario(usuario) {
+        this.usuarios=this.usuarios.filter( usuarioGuardado => usuarioGuardado.id !==  usuario.id)
+        this.usuarios.push(usuario)
+        this.mistub.withArgs("/users/"+usuario.id).resolves( this.#generarRespuesta(200, usuario ) )
+     }
+     resetear(){
+        this.entorno.restore()
+     }
+     #generarRespuesta(codigo, contenido){
+        return {
+            status: codigo,
+            json: ()=>{
+                return Promise.resolve(
+                    contenido
+                )
+            }
+        }
+     }
+     
 }
+module.exports = ServidorWebDeMentirijilla;

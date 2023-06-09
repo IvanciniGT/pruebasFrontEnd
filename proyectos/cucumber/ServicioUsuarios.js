@@ -4,7 +4,7 @@ class UserService {
       this.baseUrl = baseUrl;
     }
   
-    getUsers(callback) {
+    getUsers=(callback) =>{
       fetch(`${this.baseUrl}/users`)
         .then((response) => response.json())
         .then((data) => callback(null, {...data}))
@@ -21,14 +21,17 @@ class UserService {
         .catch((error) => callback(error, null));
     }
   
-    getUser(userId, callback) { // Vamos a probar
+    getUser=(userId, callback)=> { // Vamos a probar
       fetch(`${this.baseUrl}/users/${userId}`)
-        .then((response) => response.json())
+        .then((response) => {
+                              if (response.status!==200)throw new Error(response.status)
+                              return response.json()
+                            })
         .then((data) => callback(null, data))
         .catch((error) => callback(error, null));
     }
   
-    createUser(user, callback) { // Vamos a probarlo
+    createUser=(user, callback) =>{ // Vamos a probarlo
       fetch(`${this.baseUrl}/users`, {
         method: 'POST',
         headers: {
@@ -41,7 +44,7 @@ class UserService {
         .catch((error) => callback(error, null));
     }
   
-    updateUser(userId, user, callback) {
+    updateUser=(userId, user, callback) =>{
       fetch(`${this.baseUrl}/users/${userId}`, {
         method: 'PUT',
         headers: {
@@ -54,7 +57,7 @@ class UserService {
         .catch((error) => callback(error, null));
     }
   
-    deleteUser(userId, callback) { // delete user
+    deleteUser=(userId, callback)=> { // delete user
       fetch(`${this.baseUrl}/users/${userId}`, {
         method: 'DELETE',
       })
