@@ -1,0 +1,16 @@
+{
+  "name": "miselenium",
+  "version": "1.0.0",
+  "description": "",
+  "main": "pantallaloginexitoso.spec.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "chromedriver": "^114.0.1",
+    "mocha": "^10.2.0",
+    "selenium-webdriver": "^4.10.0"
+  }
+}
