@@ -436,3 +436,79 @@ http://miservidormentirijilla:3000/api/v1/users
 
 http://miservidormentirijilla:3000/api/v1/users/1
 {.. usuario 1}
+
+---
+
+
+# Mocha
+
+Estructurar nuestras pruebas y poderlas ejecutar con informes que se generan en auto.
+La definición de las pruebas y la implementación la hacemos en JS
+
+# Cucumber/Gherkin
+
+Estructurar nuestras pruebas y poderlas ejecutar con informes que se generan en auto.
+La definición de las pruebas la hacemos en Gherkin y la implementación la hacemos en JS
+
+# Chai
+
+Escribir las reglas de validación de las pruebas: should, expect, assert
+
+# Sinon
+
+Permite simular trabajos (servicio backend) para hacer pruebas unitarias (aislando componentes del código)
+
+    COMPONENTE WEB JS -> Servicio JS  ->  Backend (JAVA)
+    CASO 1:  UNITARIA
+                             ^         ^
+                        Test unitario  Sinon para stubear la función fetch
+                            Cucumber
+                            + Chai
+        
+    CASO 2: UNITARIA
+
+                            ^
+                        Sinon para mock del servicio JS
+        ^
+    Test unitario del componente WEB
+        Mocha o Cucumber
+        + Chai
+        + <Persona id="1"/>
+
+                 + Chai
+        
+    CASO 3: Pruebas de componente Integración
+                                        ^
+                                        Sinon para stubear la función fetch
+        ^
+    Test del componente WEB
+        Mocha o Cucumber
+        + Chai
+        + <Persona id="1"/>
+
+
+    CASO 4: Sistema (End2End) en este caso llamando sistema a mi COMPONENTE: Pruebas de componente End2End
+    COMPONENTE WEB JS -> Servicio JS  ->  Backend (JAVA)
+        ^
+    Test del componente WEB
+        Mocha o Cucumber
+        + Chai
+        + <Persona id="1"/>
+
+---
+
+Proyecto componente WEB Persona
+    dependencia de REACT 
+        Este componente lo usas en otros proyectos.
+        Empaquetas el proyecto y generas un .js minifcado... 
+
+-> app global1
+    dependencia REACT
+
+-> app global2
+    
+
+    NAVEGADOR: 
+        Le tiene que llegar todo el JS que necesite.
+            React
+            LitElement
